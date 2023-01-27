@@ -36,17 +36,18 @@ arguments
     opts.UseParallel (1,1) logical = false
 end
 
-if height(X) == 178
-    % only zero out rows when we are working with an actual image; we don't want to zero out rows of synthetic data
-    row_reduced = rowcollector(X, 'UseParallel', opts.UseParallel);
-else
-    row_reduced = X;
-end
-timeFeatures = extractTimeDomainFeatures(row_reduced);
+%if height(X) == 178
+%    % only zero out rows when we are working with an actual image; we don't want to zero out rows of synthetic data
+%    row_reduced = rowcollector(X, 'UseParallel', opts.UseParallel);
+%else
+%    row_reduced = X;
+%end
+timeFeatures = extractTimeDomainFeatures(X);
 
-freqFeatures = extractFreqDomainFeatures(row_reduced, 'UseParallel', opts.UseParallel);
-tfFeatures = extractTFFeatures(row_reduced, 'UseParallel', opts.UseParallel);
-features = [timeFeatures, freqFeatures, tfFeatures]; % ,tfFeatures
+freqFeatures = extractFreqDomainFeatures(X, 'UseParallel', opts.UseParallel);
+%tfFeatures = extractTFFeatures(row_reduced, 'UseParallel', opts.UseParallel);
+%features = [timeFeatures, freqFeatures, tfFeatures]; % ,tfFeatures
+features = [timeFeatures, freqFeatures]; % ,tfFeatures
 
 % replace nans with zeros because we don't want the ML algorithms to throw out
 % data points that have a few nan dimensions.
