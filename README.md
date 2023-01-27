@@ -1,5 +1,8 @@
 # i-etc-23-drone-rotor-analysis
 
+# Path setup
+Run the `setup.m` script to add the `feature-extraction` folder to your matlab path. Or just add it manually using `addpath()`
+
 ## Directory setup
 The code has been written to use relative paths. This can be changed if desired.
 
