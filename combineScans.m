@@ -5,7 +5,10 @@ N_ROWS = 178;
 N_COLS = 1024;
 
 DATA_FILENAME = "adjusted_data_junecal_volts.mat";
-LABELS_FILENAME = "label.mat";
+SPEED_LABELS_FILENAME = "speed_label.mat";
+POS_LABELS_FILENAME = "position_label.mat";
+ORIENTATION_LABELS_FILENAME = "orientation_label.mat";
+
 
 rawDataDir = "../data/raw";
 
@@ -45,10 +48,12 @@ for i = 1:numel(days)
             + filesep + DATA_FILENAME);
         
         % Load labels
-        load(rawDataDir + filesep + days(i) + filesep + scanId ...
-            + filesep + LABELS_FILENAME);
-
-
+        speed = load(rawDataDir + filesep + days(i) + filesep + scanId ...
+            + filesep + SPEED_LABELS_FILENAME);
+        position = load(rawDataDir + filesep + days(i) + filesep + scanId ...
+            + filesep + POS_LABELS_FILENAME);
+        orientation = load(rawDataDir + filesep + days(i) + filesep + scanId ...
+            + filesep + ORIENTATION_LABELS_FILENAME);
 
         data(scanNum).Day = days(i);
         data(scanNum).Id = scanIds{i}(j);
@@ -66,8 +71,22 @@ for i = 1:numel(days)
         % the label vector for each image in the scan. For data structure
         % purposes, we create a cell array of the label vectors since the
         % images are a cell array of matrices.
-        replicatedLabels = repmat(label,nImages,1);
-        data(scanNum).Labels = mat2cell(replicatedLabels,[nRows * ones(1,nImages)],1);
+        replicatedSpeedLabels = repmat(speed.label,nImages,1);
+        data(scanNum).SpeedLabels = mat2cell(replicatedSpeedLabels,[nRows * ones(1,nImages)],1);
+
+        replicatedPosLabels = repmat(position.label,nImages,1);
+        data(scanNum).PositionLabels = mat2cell(replicatedPosLabels,[nRows * ones(1,nImages)],1);
+
+        replicatedOrientationLabels = repmat(orientation.label,nImages,1);
+        data(scanNum).OrientationLabels = mat2cell(replicatedOrientationLabels,[nRows * ones(1,nImages)],1);
+
+        % Create labels for the 3-class problem: nothing, hard target, or
+        % drone. nothing = 0, hard target = 1, drone = 2. Any orientation
+        % label that is > 1 is a drone, so we just threshold those to 2
+        % to create the drone label.
+        droneLabels = replicatedOrientationLabels;
+        droneLabels(droneLabels > 1) = 2;
+        data(scanNum).Labels = droneLabels;
 
         % Grab metadata
         data(scanNum).Tilt = [adjusted_data_junecal.tilt]';
