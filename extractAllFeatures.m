@@ -9,21 +9,21 @@ end
 baseDataDir ='../data';
 rawDataDir = [baseDataDir filesep 'raw'];
 preprocessedDataDir = [baseDataDir filesep 'preprocessed'];
-rawDataFile = 'scans.mat';
+rawDataFile = 'combined-data-2022-12-16.mat';
 
 %% Load data
 load([rawDataDir filesep rawDataFile])
 
 
 %% Extract features
-for scanNum = progress(1:numel(scans))
+for scanNum = progress(1:numel(data))
     scanFeatures = cellfun(@(X) extractFeatures(X, 'UseParallel', true), ...
-        scans(scanNum).Data, 'UniformOutput', false);
-    scans(scanNum).Features = scanFeatures;
+        data(scanNum).Data, 'UniformOutput', false);
+    data(scanNum).Features = scanFeatures;
 end
 
 
 %% Save preprocessed data
 mkdir(preprocessedDataDir);
 save([preprocessedDataDir filesep 'preprocessedScans.mat'], ...
-    'scans', '-v7.3');
+    'data', '-v7.3');
