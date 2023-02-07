@@ -86,7 +86,7 @@ for i = 1:numel(days)
         % to create the drone label.
         droneLabels = replicatedOrientationLabels;
         droneLabels(droneLabels > 1) = 2;
-        data(scanNum).Labels = droneLabels;
+        data(scanNum).Labels = mat2cell(droneLabels,[nRows * ones(1,nImages)],1);;
 
         % Grab metadata
         data(scanNum).Tilt = [adjusted_data_junecal.tilt]';
