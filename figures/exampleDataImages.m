@@ -48,28 +48,28 @@ nexttile
 imagesc(onAxisOverlap.time * SEC_TO_MS, range(1:30), onAxisOverlap.raw_data(1:30,:));
 xlim([0 150])
 set(gca, 'FontSize', 10, 'FontName', 'Times New Roman')
-title('(a)','Position',[-10 3], 'FontSize', 11)
+title('(a)','Position',[-5.5 3], 'FontSize', 11)
 
 
 nexttile
 imagesc(onAxisProp.time * SEC_TO_MS, range(1:30), onAxisProp.raw_data(1:30,:));
 xlim([0 150])
 set(gca, 'FontSize', 10, 'FontName', 'Times New Roman')
-title('(b)','Position',[-10 3], 'FontSize', 11)
+title('(b)','Position',[-6 3], 'FontSize', 11)
 
 
 nexttile
 imagesc(perpendciularProp.time * SEC_TO_MS, range(1:30), perpendciularProp.raw_data(1:30,:));
 xlim([0 150])
 set(gca, 'FontSize', 10, 'FontName', 'Times New Roman')
-title('(c)','Position',[-10 3], 'FontSize', 11)
+title('(c)','Position',[-5.5 3], 'FontSize', 11)
 
 
 nexttile
 imagesc(perpendicularMotorBody.time * SEC_TO_MS, range(1:30), perpendicularMotorBody.raw_data(1:30,:));
 xlim([0 150])
 set(gca, 'FontSize', 10, 'FontName', 'Times New Roman')
-title('(d)','Position',[-10 3], 'FontSize', 11)
+title('(d)','Position',[-6 3], 'FontSize', 11)
 
 
 cbar = colorbar;
