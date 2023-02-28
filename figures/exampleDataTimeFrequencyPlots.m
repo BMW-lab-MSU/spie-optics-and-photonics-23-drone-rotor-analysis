@@ -72,8 +72,9 @@ ax2.Layout.Tile = 2;
 fs = 1/mean(diff(onAxisOverlap.time));
 f = linspace(0, fs/2, 512);
 
-onAxisOverlapSpectrum = db(abs(fft(onAxisOverlap.data(motorRangeBin,:))));
-plot(ax2, f, onAxisOverlapSpectrum(1:end/2), 'LineWidth', 1.5);
+onAxisOverlapSpectrum = (abs(fft(onAxisOverlap.data(motorRangeBin,:))));
+onAxisOverlapSpectrum = onAxisOverlapSpectrum/onAxisOverlapSpectrum(1);
+plot(ax2, f, db(onAxisOverlapSpectrum(1:end/2)), 'LineWidth', 1.5);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -102,8 +103,9 @@ ax4.Layout.Tile = 2;
 fs = 1/mean(diff(onAxisProp.time));
 f = linspace(0, fs/2, 512);
 
-onAxisPropSpectrum = db(abs(fft(onAxisProp.data(motorRangeBin,:))));
-plot(ax4, f, onAxisPropSpectrum(1:end/2), 'LineWidth', 1.5);
+onAxisPropSpectrum = (abs(fft(onAxisProp.data(motorRangeBin,:))));
+onAxisPropSpectrum = onAxisPropSpectrum/onAxisPropSpectrum(1);
+plot(ax4, f, db(onAxisPropSpectrum(1:end/2)), 'LineWidth', 1.5);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -132,8 +134,9 @@ ax6.Layout.Tile = 2;
 fs = 1/mean(diff(perpendicularProp.time));
 f = linspace(0, fs/2, 512);
 
-perpendicularPropSpectrum = db(abs(fft(perpendicularProp.data(motorRangeBin,:))));
-plot(ax6, f, perpendicularPropSpectrum(1:end/2), 'LineWidth', 1.5);
+perpendicularPropSpectrum = (abs(fft(perpendicularProp.data(motorRangeBin,:))));
+perpendicularPropSpectrum = perpendicularPropSpectrum/perpendicularPropSpectrum(1);
+plot(ax6, f, db(perpendicularPropSpectrum(1:end/2)), 'LineWidth', 1.5);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % perpendicular motor body plots
@@ -162,8 +165,10 @@ fs = 1/mean(diff(perpendicularMotorBody.time));
 f = linspace(0, fs/2, 512);
 
 avg = mean(perpendicularMotorBody.data(motorRangeBin,:));
-perpendicularMotorBodySpectrum = db(abs(fft(perpendicularMotorBody.data(motorRangeBin,:))));
-plot(ax8, f, perpendicularMotorBodySpectrum(1:end/2), 'LineWidth', 1.5);
+perpendicularMotorBodySpectrum = (abs(fft(perpendicularMotorBody.data(motorRangeBin,:))));
+perpendicularMotorBodySpectrum = perpendicularMotorBodySpectrum/perpendicularMotorBodySpectrum(1);
+% plot(ax8, f, db(perpendicularMotorBodySpectrum(1:end/2)), 'LineWidth', 1.5);
+scatter(ax8, f, db(perpendicularMotorBodySpectrum(1:end/2)), 10,'filled');
 
 
 
@@ -172,7 +177,7 @@ for i = 1:4
     tiledChartObj.Children(i).Children(2).XLabel.String = 'time (ms)';
     tiledChartObj.Children(i).Children(1).XLabel.String = 'frequency (Hz)';
     tiledChartObj.Children(i).Children(2).YLabel.String = sprintf('voltage\n(V)');
-    tiledChartObj.Children(i).Children(1).YLabel.String = sprintf('magnitude\n(dBV)');
+    tiledChartObj.Children(i).Children(1).YLabel.String = sprintf('magnitude\n(dB)');
 
     tiledChartObj.Children(i).Children(1).YLabel.Units = 'normalized';
     tiledChartObj.Children(i).Children(2).YLabel.Units = 'normalized';   
@@ -208,10 +213,10 @@ ax6.XLim = [0 250];
 ax8.XLim = [0 250];
 
 % Set freq.-domain y-axis limits
-ax2.YLim = [-20 45];
-ax4.YLim = [-20 45];
-ax6.YLim = [-20 45];
-ax8.YLim = [-20 45];
+ax2.YLim = [-70 5];
+ax4.YLim = [-70 5];
+ax6.YLim = [-70 5];
+ax8.YLim = [-70 5];
 
 % line up y-labels
 pos1 = tiledChartObj.Children(1).Children(1).YLabel.Position(1);
