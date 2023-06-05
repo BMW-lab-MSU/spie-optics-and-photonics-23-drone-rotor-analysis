@@ -1,27 +1,26 @@
 clear all
 %% Path setup
-dataDir = '../../data/raw/2022-12-16';
+dataDir = '../../data/raw/2023-04-05';
 
-% all of these test cases were at 1,428.45 RPM (71.42 Hz)
-onAxisOverlapPath = [dataDir filesep 'drone-prop-test115825'];
-onAxisPropPath = [dataDir filesep 'drone-prop-test103404'];
-perpendicularPropPath = [dataDir filesep 'drone-prop-test111351'];
-perpendicularMotorBodyPath = [dataDir  filesep 'drone-prop-test112945'];
+onAxisOverlapPath = [dataDir filesep 'norm360-drone-prop-distance-test150121'];
+onAxisPropPath = [dataDir filesep 'norm360-drone-prop-distance-test144801'];
+perpendicularPropPath = [dataDir filesep 'norm360-drone-prop-distance-test140719'];
+perpendicularOverlapPath = [dataDir  filesep 'norm360-drone-prop-distance-test143511'];
 
 filename = 'adjusted_data_junecal_volts.mat';
 
 %% Load data
 load([onAxisOverlapPath filesep filename]);
-onAxisOverlap = adjusted_data_junecal(1);
+onAxisOverlap = adjusted_data_junecal(21);
 
 load([onAxisPropPath filesep filename]);
-onAxisProp = adjusted_data_junecal(1);
+onAxisProp = adjusted_data_junecal(21);
 
 load([perpendicularPropPath filesep filename]);
-perpendicularProp = adjusted_data_junecal(1);
+perpendicularProp = adjusted_data_junecal(21);
 
-load([perpendicularMotorBodyPath filesep filename]);
-perpendicularMotorBody = adjusted_data_junecal(1);
+load([perpendicularOverlapPath filesep filename]);
+perpendicularOverlap = adjusted_data_junecal(21);
 
 clear adjusted_data_junecal
 
@@ -49,7 +48,7 @@ colormap(flipud(cmap));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % on-axis overlap plots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-motorRangeBin = 4;
+motorRangeBin = 13;
 
 figure('Visible','off')
 % figure('Visible','on')
@@ -63,7 +62,7 @@ tlayout1.Layout.Tile = 1;
 
 ax1 = axes(tlayout1);
 ax1.Layout.Tile = 1;
-plot(ax1, onAxisOverlap.time * SEC_TO_MS, onAxisOverlap.data(motorRangeBin,:), 'LineWidth', 1.5);
+plot(ax1, onAxisOverlap.time * SEC_TO_MS, onAxisOverlap.data(motorRangeBin,:), 'LineWidth', 1);
 
 
 ax2 = axes(tlayout1);
@@ -80,7 +79,7 @@ plot(ax2, f, db(onAxisOverlapSpectrum(1:end/2)), 'LineWidth', 1.5);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % on-axis prop plots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-motorRangeBin = 3;
+motorRangeBin = 13;
 
 figure('Visible','off')
 % figure('Visible','on')
@@ -95,7 +94,7 @@ tlayout2.Layout.Tile = 2;
 
 ax3 = axes(tlayout2);
 ax3.Layout.Tile = 1;
-plot(ax3, onAxisProp.time * SEC_TO_MS, onAxisProp.data(motorRangeBin,:), 'LineWidth', 1.5);
+plot(ax3, onAxisProp.time * SEC_TO_MS, onAxisProp.data(motorRangeBin,:), 'LineWidth', 1);
 
 ax4 = axes(tlayout2);
 ax4.Layout.Tile = 2;
@@ -108,40 +107,12 @@ onAxisPropSpectrum = onAxisPropSpectrum/onAxisPropSpectrum(1);
 plot(ax4, f, db(onAxisPropSpectrum(1:end/2)), 'LineWidth', 1.5);
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% perpendicular prop plots
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-motorRangeBin = 4;
 
-figure('Visible','off')
-% figure('Visible','on')
-
-tlayout3 = tiledlayout(2,1);
-
-tlayout3.Padding = 'tight';
-tlayout3.TileSpacing = 'tight';
-
-tlayout3.Parent = tiledChartObj;
-tlayout3.Layout.Tile = 3;
-
-ax5 = axes(tlayout3);
-ax5.Layout.Tile = 1;
-plot(ax5, perpendicularProp.time * SEC_TO_MS, perpendicularProp.data(motorRangeBin,:), 'LineWidth', 1.5);
-
-ax6 = axes(tlayout3);
-ax6.Layout.Tile = 2;
-
-fs = 1/mean(diff(perpendicularProp.time));
-f = linspace(0, fs/2, 512);
-
-perpendicularPropSpectrum = (abs(fft(perpendicularProp.data(motorRangeBin,:))));
-perpendicularPropSpectrum = perpendicularPropSpectrum/perpendicularPropSpectrum(1);
-plot(ax6, f, db(perpendicularPropSpectrum(1:end/2)), 'LineWidth', 1.5);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-% perpendicular motor body plots
+% perpendicular overlap plots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-motorRangeBin = 4;
+motorRangeBin = 12;
 
 figure('Visible','off')
 % figure('Visible','on')
@@ -152,24 +123,54 @@ tlayout4.Padding = 'tight';
 tlayout4.TileSpacing = 'tight';
 
 tlayout4.Parent = tiledChartObj;
-tlayout4.Layout.Tile = 4;
+tlayout4.Layout.Tile = 3;
 
 ax7 = axes(tlayout4);
 ax7.Layout.Tile = 1;
-plot(ax7, perpendicularMotorBody.time * SEC_TO_MS, perpendicularMotorBody.data(motorRangeBin,:), 'LineWidth', 1.5);
+plot(ax7, perpendicularOverlap.time * SEC_TO_MS, perpendicularOverlap.data(motorRangeBin,:), 'LineWidth', 1);
 
 ax8 = axes(tlayout4);
 ax8.Layout.Tile = 2;
 
-fs = 1/mean(diff(perpendicularMotorBody.time));
+fs = 1/mean(diff(perpendicularOverlap.time));
 f = linspace(0, fs/2, 512);
 
-avg = mean(perpendicularMotorBody.data(motorRangeBin,:));
-perpendicularMotorBodySpectrum = (abs(fft(perpendicularMotorBody.data(motorRangeBin,:))));
-perpendicularMotorBodySpectrum = perpendicularMotorBodySpectrum/perpendicularMotorBodySpectrum(1);
-% plot(ax8, f, db(perpendicularMotorBodySpectrum(1:end/2)), 'LineWidth', 1.5);
-scatter(ax8, f, db(perpendicularMotorBodySpectrum(1:end/2)), 10,'filled');
+avg = mean(perpendicularOverlap.data(motorRangeBin,:));
+perpendicularOverlapSpectrum = (abs(fft(perpendicularOverlap.data(motorRangeBin,:))));
+perpendicularOverlapSpectrum = perpendicularOverlapSpectrum/perpendicularOverlapSpectrum(1);
+plot(ax8, f, db(perpendicularOverlapSpectrum(1:end/2)), 'LineWidth', 1.5);
+% scatter(ax8, f, db(perpendicularOverlapSpectrum(1:end/2)), 10,'filled');
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% perpendicular prop plots
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+motorRangeBin = 13;
+
+figure('Visible','off')
+% figure('Visible','on')
+
+tlayout3 = tiledlayout(2,1);
+
+tlayout3.Padding = 'tight';
+tlayout3.TileSpacing = 'tight';
+
+tlayout3.Parent = tiledChartObj;
+tlayout3.Layout.Tile = 4;
+
+ax5 = axes(tlayout3);
+ax5.Layout.Tile = 1;
+plot(ax5, perpendicularProp.time * SEC_TO_MS, perpendicularProp.data(motorRangeBin,:), 'LineWidth', 1);
+
+ax6 = axes(tlayout3);
+ax6.Layout.Tile = 2;
+
+fs = 1/mean(diff(perpendicularProp.time));
+f = linspace(0, fs/2, 512);
+
+perpendicularPropSpectrum = (abs(fft(perpendicularProp.data(motorRangeBin,:))));
+perpendicularPropSpectrum = perpendicularPropSpectrum/perpendicularPropSpectrum(1);
+plot(ax6, f, db(perpendicularPropSpectrum(1:end/2)), 'LineWidth', 1.5);
 
 
 % Set x- and y-axis labels
@@ -194,7 +195,7 @@ end
 ax1.XLim = [0 max(onAxisOverlap.time * SEC_TO_MS)];
 ax3.XLim = [0 max(onAxisProp.time * SEC_TO_MS)];
 ax5.XLim = [0 max(perpendicularProp.time * SEC_TO_MS)];
-ax7.XLim = [0 max(perpendicularMotorBody.time * SEC_TO_MS)];
+ax7.XLim = [0 max(perpendicularOverlap.time * SEC_TO_MS)];
 ax1.XTick = [0 50 100 150 200 floor(ax1.XLim(2))];
 ax3.XTick = [0 50 100 150 200 floor(ax3.XLim(2))];
 ax5.XTick = [0 50 100 150 200 floor(ax5.XLim(2))];
@@ -251,10 +252,10 @@ ax1.Title.FontSize = 11;
 ax3.Title.String = '(b)';
 ax3.Title.Position = [0 0.15 0];
 ax3.Title.FontSize = 11;
-ax5.Title.String = '(c)';
+ax5.Title.String = '(d)';
 ax5.Title.Position = [0 0.15 0];
 ax5.Title.FontSize = 11;
-ax7.Title.String = '(d)';
+ax7.Title.String = '(c)';
 ax7.Title.Position = [0 0.15 0];
 ax7.Title.FontSize = 11;
 

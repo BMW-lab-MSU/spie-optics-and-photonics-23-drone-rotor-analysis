@@ -1,27 +1,27 @@
 clear all
 %% Path setup
-dataDir = '../../data/raw/2022-12-16';
+dataDir = '../../data/raw/2023-04-05';
 
-% all of these test cases were at 1,428.45 RPM (71.42 Hz)
-onAxisOverlapPath = [dataDir filesep 'drone-prop-test115825'];
-onAxisPropPath = [dataDir filesep 'drone-prop-test103404'];
-perpendicularPropPath = [dataDir filesep 'drone-prop-test111351'];
-perpendicularMotorBodyPath = [dataDir  filesep 'drone-prop-test112945'];
+% all of these test cases were at 10k ERPM
+onAxisOverlapPath = [dataDir filesep 'norm360-drone-prop-distance-test150121'];
+onAxisPropPath = [dataDir filesep 'norm360-drone-prop-distance-test144801'];
+perpendicularPropPath = [dataDir filesep 'norm360-drone-prop-distance-test140719'];
+perpendicularOverlapPath = [dataDir  filesep 'norm360-drone-prop-distance-test143511'];
 
 filename = 'adjusted_data_junecal_volts.mat';
 
 %% Load data
 load([onAxisOverlapPath filesep filename]);
-onAxisOverlap = adjusted_data_junecal(1);
+onAxisOverlap = adjusted_data_junecal(21);
 
 load([onAxisPropPath filesep filename]);
-onAxisProp = adjusted_data_junecal(1);
+onAxisProp = adjusted_data_junecal(21);
 
 load([perpendicularPropPath filesep filename]);
-perpendicularProp = adjusted_data_junecal(1);
+perpendicularProp = adjusted_data_junecal(21);
 
-load([perpendicularMotorBodyPath filesep filename]);
-perpendicularMotorBody = adjusted_data_junecal(1);
+load([perpendicularOverlapPath filesep filename]);
+perpendicularOverlap = adjusted_data_junecal(21);
 
 clear adjusted_data_junecal
 
@@ -37,8 +37,8 @@ tiledChartObj.TileSpacing = 'compact';
 SEC_TO_MS = 1e3;
 
 rangeResolution = 0.75; %[m]
-motorRange = 2.7; %[m]
-motorRangeBin = 3;
+motorRange = 10; %[m]
+motorRangeBin = floor(motorRange/rangeResolution);
 rangeStart = motorRange - rangeResolution * (motorRangeBin - 1);
 rangeEnd = rangeStart + rangeResolution * (height(onAxisOverlap.raw_data) - 1);
 range = rangeStart:rangeResolution:rangeEnd;
@@ -64,14 +64,14 @@ xticks([])
 
 
 nexttile
-imagesc(perpendicularProp.time * SEC_TO_MS, range(1:30), perpendicularProp.data(1:30,:));
+imagesc(perpendicularOverlap.time * SEC_TO_MS, range(1:30), perpendicularOverlap.data(1:30,:));
 xlim([0 150])
 set(gca, 'FontSize', 10, 'FontName', 'Times New Roman')
 title('(c)', 'Units', 'normalized', 'Position',[0 1.03 0], 'FontSize', 11)
 
 
 nexttile
-imagesc(perpendicularMotorBody.time * SEC_TO_MS, range(1:30), perpendicularMotorBody.data(1:30,:));
+imagesc(perpendicularProp.time * SEC_TO_MS, range(1:30), perpendicularProp.data(1:30,:));
 xlim([0 150])
 set(gca, 'FontSize', 10, 'FontName', 'Times New Roman')
 title('(d)', 'Units', 'normalized', 'Position',[0 1.03 0], 'FontSize', 11)
