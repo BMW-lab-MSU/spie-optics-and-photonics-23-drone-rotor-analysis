@@ -1,4 +1,4 @@
-clear all
+clearvars
 %% Path setup
 dataDir = '../../data/raw/2023-04-05';
 
