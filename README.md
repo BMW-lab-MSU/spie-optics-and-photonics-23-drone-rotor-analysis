@@ -1,5 +1,5 @@
-# I-ETC 2023 Drone Propeller Rotation Analysis
-This repository contains the code used in our paper *Preliminary Analysis of Drone Propeller Rotation using Wingbeat-Modulation LiDAR*, which has been submitted to the I-ETC 2023 conference.
+# SPIE Optics and Photonics 2023: Drone Propeller Rotation Analysis
+This repository contains the code used in our paper [*Preliminary Analysis of Drone Propeller Signals Using Wingbeat-Modulation Lidar*](https://doi.org/10.1117/12.2676175), which was published in the SPIE Optics and Photonics "Applications of Machine Learning" conference.
 
 # Path setup
 Run the `setup.m` script to add the `feature-extraction` folder to your matlab path. Or just add it manually using `addpath()`
